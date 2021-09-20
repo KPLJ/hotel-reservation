@@ -11,6 +11,18 @@ public class Room implements IRoom {
         this.enumeration = enumeration;
     }
 
+    public Room(String roomNumber, Double price, String roomType) {
+        this.roomNumber = roomNumber;
+        this.price = price;
+        if (roomType.equals("SINGLE")) {
+            this.enumeration = RoomType.SINGLE;
+        } else if (roomType.equals("DOUBLE")) {
+            this.enumeration = RoomType.DOUBLE;
+        } else {
+            throw new IllegalArgumentException("Invalid roomType: " + roomType);
+        }
+    }
+
     @Override
     public String getRoomNumber() {
         return roomNumber;
