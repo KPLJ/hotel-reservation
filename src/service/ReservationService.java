@@ -12,7 +12,7 @@ public class ReservationService {
     // Map<RoomNumber, IRoom>
     private static Map<String, IRoom> rooms;
     //Map<Reservation.toString(), Reservation>
-    private static Map<String, Reservation> reservations; //TODO: not sure if this should be static
+    private static Map<String, Reservation> reservations;
 
     public ReservationService() {
         rooms = new HashMap<>();
@@ -33,6 +33,12 @@ public class ReservationService {
         return newReservation;
     }
 
+    /**
+     * Find all available rooms in given period.
+     * @param checkInDate The check in date.
+     * @param checkOutDate The check out date.
+     * @return Rooms that are available from checkInDate to checkOutDate.
+     */
     public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
         Collection<IRoom> foundRooms = new HashSet<>();
         for (Reservation reservation : reservations.values()) {

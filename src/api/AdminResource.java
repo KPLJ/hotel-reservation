@@ -13,8 +13,8 @@ public class AdminResource {
     static private ReservationService reservationService;
 
     public AdminResource() {
-        customerService = new CustomerService();
-        reservationService = new ReservationService();
+        customerService = HotelResource.getCustomerService();
+        reservationService = HotelResource.getReservationService();
     }
 
     public Customer getCustomer(String email) {

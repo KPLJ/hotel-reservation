@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
-    private AdminResource adminResource;
+    private final AdminResource adminResource;
 
     public AdminMenu() {
         adminResource = new AdminResource();
