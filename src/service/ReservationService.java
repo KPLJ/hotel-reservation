@@ -78,6 +78,11 @@ public class ReservationService {
     }
 
     public void printAllReservation() {
+        if (reservations.isEmpty()) {
+            System.out.println("No reservation in database now.");
+            return;
+        }
+
         for (Reservation reservation : reservations.values()) {
             System.out.println(reservation);
         }

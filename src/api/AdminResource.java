@@ -17,10 +17,6 @@ public class AdminResource {
         reservationService = HotelResource.getReservationService();
     }
 
-    public Customer getCustomer(String email) {
-        return customerService.getCustomer(email);
-    }
-
     public void addRoom(List<IRoom> rooms) {
         for (IRoom room : rooms) {
             reservationService.addRoom(room);
