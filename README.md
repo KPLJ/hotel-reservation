@@ -6,5 +6,5 @@ Java command line application allows you to create account with your email, and 
 
 ## Setting up
 
-Install [Intellij IDEA](https://www.jetbrains.com/idea/), build and run `HotelApplication.java`
+Install [Intellij IDEA](https://www.jetbrains.com/idea/), build and run `src/model/HotelApplication.java`
 
