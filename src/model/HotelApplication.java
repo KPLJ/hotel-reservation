@@ -3,9 +3,9 @@ package model;
 import menu.MainMenu;
 
 /**
- * This class is to start this program and test
+ * This class is to start this program.
  */
-public class Driver {
+public class HotelApplication {
     public static void main(String[] args) {
         new MainMenu();
     }

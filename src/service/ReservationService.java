@@ -41,12 +41,30 @@ public class ReservationService {
      */
     public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
         Collection<IRoom> foundRooms = new HashSet<>();
-        for (Reservation reservation : reservations.values()) {
-            if (reservation.getCheckInDate().equals(checkInDate) && reservation.getCheckOutDate().equals(checkOutDate)) {
-                foundRooms.add(reservation.getRoom());
+        for (IRoom room : rooms.values()) {
+            if (!roomIsBooked(room, checkInDate, checkOutDate)) {
+                foundRooms.add(room);
             }
         }
         return foundRooms;
+    }
+
+    /**
+     * Check if a room has been booked.
+     * @param room The room to check.
+     * @param checkInDate The check-in date.
+     * @param checkOutDate The check-out date.
+     * @return True if the room has not been booked, otherwise false.
+     */
+    public boolean roomIsBooked(IRoom room, Date checkInDate, Date checkOutDate) {
+        for (Reservation reservation : reservations.values()) {
+            if (reservation.getRoom().equals(room) &&
+                    reservation.getCheckInDate().equals(checkInDate) &&
+                    reservation.getCheckOutDate().equals(checkOutDate)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Collection<Reservation> getCustomersReservation(Customer customer) {

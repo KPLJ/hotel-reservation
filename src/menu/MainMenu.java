@@ -1,16 +1,16 @@
 package menu;
 
 import api.HotelResource;
-import model.Customer;
 import model.IRoom;
 import model.Reservation;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MainMenu {
-    private HotelResource hotelResource;
+    private final HotelResource hotelResource;
 
     public MainMenu() {
         hotelResource = new HotelResource();
@@ -24,28 +24,26 @@ public class MainMenu {
             System.out.println("4. Admin");
             System.out.println("5. Exit");
 
-            Scanner in = new Scanner(System.in);
-            command = in.nextInt();
+            try {
+                Scanner in = new Scanner(System.in);
+                command = in.nextInt();
 
-            switch (command) {
-                case 1:
-                    findAndReserve();
-                    break;
-                case 2:
-                    displayReservations();
-                    break;
-                case 3:
-                    createAccount();
-                    break;
-                case 4:
-                    new AdminMenu();
-                    System.out.println("Returned to main menu");
-                    break;
-                case 5:
-                    System.out.println("Exit successfully");
-                    return;
-                default:
-                    throw new IllegalArgumentException("Invalid input");
+                switch (command) {
+                    case 1 -> findAndReserve();
+                    case 2 -> displayReservations();
+                    case 3 -> createAccount();
+                    case 4 -> {
+                        new AdminMenu();
+                        System.out.println("Returned to main menu");
+                    }
+                    case 5 -> {
+                        System.out.println("Exit successfully");
+                        return;
+                    }
+                    default -> throw new IllegalArgumentException("Invalid input");
+                }
+            } catch (InputMismatchException e) {
+                throw new InputMismatchException("Invalid input format.");
             }
         }
     }
@@ -78,8 +76,12 @@ public class MainMenu {
         System.out.println("Please input your email: ");
         String email = in.next();
 
-        hotelResource.bookARoom(email, hotelResource.getRoom(roomNumber), checkInDate,checkOutDate);
-        System.out.println("Successfully reserved Room " + roomNumber + " " + dateString);
+        if (hotelResource.getCustomer(email) == null) {
+            System.out.println("Booking failed, you need to create an account first.");
+        } else {
+            hotelResource.bookARoom(email, hotelResource.getRoom(roomNumber), checkInDate, checkOutDate);
+            System.out.println("Successfully reserved Room " + roomNumber + " " + dateString);
+        }
     }
 
     private void displayReservations() {
@@ -87,6 +89,12 @@ public class MainMenu {
         System.out.println("Please input your email: ");
         Scanner in = new Scanner(System.in);
         email = in.next();
+
+        if (hotelResource.getCustomer(email) == null) {
+            System.out.println("This account does not exist.");
+            return;
+        }
+
         Collection<Reservation> reservations = hotelResource.getCustomerReservations(email);
 
         if (!reservations.isEmpty()) {

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Locale;
+
 public class Room implements IRoom {
     private String roomNumber;
     private Double price;
@@ -14,9 +16,10 @@ public class Room implements IRoom {
     public Room(String roomNumber, Double price, String roomType) {
         this.roomNumber = roomNumber;
         this.price = price;
-        if (roomType.equals("SINGLE")) {
+        roomType = roomType.toLowerCase(Locale.ROOT);
+        if (roomType.equals("single") || roomType.equals("s")) {
             this.enumeration = RoomType.SINGLE;
-        } else if (roomType.equals("DOUBLE")) {
+        } else if (roomType.equals("double") || roomType.equals("d")) {
             this.enumeration = RoomType.DOUBLE;
         } else {
             throw new IllegalArgumentException("Invalid roomType: " + roomType);

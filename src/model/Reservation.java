@@ -17,7 +17,7 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return customer.toString() + " Room " + room.getRoomNumber() + " " + checkInDate.toString() + "-" + checkOutDate.toString();
+        return customer.toString() + " Room " + room.getRoomNumber() + " " + parseDate(checkInDate) + "-" + parseDate(checkOutDate);
     }
 
     public Customer getCustomer() {
@@ -34,5 +34,16 @@ public class Reservation {
 
     public Date getCheckOutDate() {
         return checkOutDate;
+    }
+
+    /**
+     * Parse a Date object into yyyymmdd format.
+     *
+     * @param date The Date object to parse.
+     * @return A string in format of yyyymmdd.
+     */
+    public static String parseDate(Date date) {
+        return Integer.toString(date.getYear()) + Integer.toString(date.getMonth()) +
+                (date.getDate() < 10 ? "0" + Integer.toString(date.getDate()) : Integer.toString(date.getDate()));
     }
 }
