@@ -1,14 +1,12 @@
 package menu;
 
 import api.AdminResource;
+import api.HotelResource;
 import model.Customer;
 import model.IRoom;
 import model.Room;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class AdminMenu {
     private final AdminResource adminResource;
@@ -80,10 +78,8 @@ public class AdminMenu {
         Scanner in = new Scanner(System.in);
         List<IRoom> rooms = new ArrayList<>();
         System.out.println("Please input room info (roomNumber price Single(s)/Double(d)):");
-        String roomNumber = in.next();
-        Double price = in.nextDouble();
-        String roomType = in.next();
-        IRoom room = new Room(roomNumber, price, roomType);
+
+        IRoom room = checkRoomValidity(in);
         rooms.add(room);
         adminResource.addRoom(rooms);
         System.out.println("Room added");
@@ -96,7 +92,7 @@ public class AdminMenu {
         numStr = MainMenu.checkStringNumeric(numStr, in);
         int roomCount = Integer.parseInt(numStr);
         while (true) {
-            if (roomCount < 1 || roomCount > 10 ) {
+            if (roomCount < 1 || roomCount > 10) {
                 System.out.println("Please input valid number (1-10): ");
                 roomCount = in.nextInt();
             } else {
@@ -107,13 +103,52 @@ public class AdminMenu {
         List<IRoom> rooms = new ArrayList<>();
         System.out.println("Please input " + roomCount + " rooms info (roomNumber price Single(s)/Double(d)):");
         for (int i = 0; i < roomCount; i++) {
-            String roomNumber = in.next();
-            Double price = in.nextDouble();
-            String roomType = in.next();
-            IRoom room = new Room(roomNumber, price, roomType);
+            IRoom room = checkRoomValidity(in);
             rooms.add(room);
         }
         adminResource.addRoom(rooms);
         System.out.println("Room(s) added");
+    }
+
+    public static IRoom checkRoomValidity(Scanner in) {
+        String roomNumber = in.next();
+        // check if this roomNumber exists
+        while (true) {
+            if (HotelResource.getReservationService().getARoom(roomNumber) != null) {
+                System.out.println("This room exists, please input another room number: ");
+                roomNumber = in.next();
+            } else {
+                break;
+            }
+        }
+
+        String priceStr = in.next();
+        // check if input is a valid price
+        while (true) {
+            if (MainMenu.isDouble(priceStr) && Double.parseDouble(priceStr) >= 0) {
+                break;
+            } else {
+                System.out.println("Please input a valid number for price: ");
+                priceStr = in.next();
+            }
+        }
+        Double price = Double.parseDouble(priceStr);
+
+        String roomType = in.next().toLowerCase(Locale.ROOT);
+        List<String> validRoomTypes = new ArrayList<>();
+        validRoomTypes.add("s");
+        validRoomTypes.add("d");
+        validRoomTypes.add("single");
+        validRoomTypes.add("double");
+        while (true) {
+            if (validRoomTypes.contains(roomType)) {
+                break;
+            } else {
+                System.out.println("Please input a valid roomType Single(s)/Double(d):");
+                roomType = in.next();
+            }
+        }
+
+        return new Room(roomNumber, price, roomType);
     }
 }

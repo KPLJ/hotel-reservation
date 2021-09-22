@@ -75,7 +75,7 @@ public class MainMenu {
         }
 
         while (true) {
-            if (isNumeric(dataString.substring(0, 8)) && isNumeric(dataString.substring(9, 17))) {
+            if (isInteger(dataString.substring(0, 8)) && isInteger(dataString.substring(9, 17))) {
                 break;
             } else {
                 System.out.println("Please input dates in correct format (yyyymmdd-yyyymmdd): ");
@@ -171,7 +171,7 @@ public class MainMenu {
      * @param s The String to be checked.
      * @return True if the String can be converted to int, otherwise false.
      */
-    public static boolean isNumeric(String s) {
+    public static boolean isInteger(String s) {
         if (s == null) {
             return false;
         }
@@ -184,9 +184,22 @@ public class MainMenu {
         return true;
     }
 
+    public static boolean isDouble(String s) {
+        if (s == null) {
+            return false;
+        }
+
+        try {
+            Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
     public static String checkStringNumeric(String numStr, Scanner in) {
         while(true) {
-            if (isNumeric(numStr)) {
+            if (isInteger(numStr)) {
                 break;
             } else {
                 System.out.println("Please input valid number: ");
