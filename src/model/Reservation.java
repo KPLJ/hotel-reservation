@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -44,8 +45,8 @@ public class Reservation {
      * @return A string in format of yyyymmdd.
      */
     public static String parseDate(Date date) {
-        return Integer.toString(date.getYear()) + Integer.toString(date.getMonth()) +
-                (date.getDate() < 10 ? "0" + Integer.toString(date.getDate()) : Integer.toString(date.getDate()));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        return sdf.format(date);
     }
 
     @Override
