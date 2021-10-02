@@ -1,7 +1,6 @@
 package menu;
 
 import api.AdminResource;
-import api.HotelResource;
 import model.Customer;
 import model.IRoom;
 import model.Room;
@@ -114,7 +113,7 @@ public class AdminMenu {
         String roomNumber = in.next();
         // check if this roomNumber exists
         while (true) {
-            if (HotelResource.getReservationService().getARoom(roomNumber) != null) {
+            if (AdminResource.getReservationService().getARoom(roomNumber) != null) {
                 System.out.println("This room exists, please input another room number: ");
                 roomNumber = in.next();
             } else {

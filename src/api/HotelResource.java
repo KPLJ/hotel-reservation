@@ -10,12 +10,12 @@ import java.util.Collection;
 import java.util.Date;
 
 public class HotelResource {
-    static private CustomerService customerService;
-    static private ReservationService reservationService;
+    private static CustomerService customerService;
+    private static ReservationService reservationService;
 
     public HotelResource() {
-        customerService = new CustomerService();
-        reservationService = new ReservationService();
+        customerService = CustomerService.getInstance();
+        reservationService = ReservationService.getInstance();
     }
 
     public  Customer getCustomer(String email) {
@@ -42,11 +42,11 @@ public class HotelResource {
         return reservationService.findRooms(checkIn, checkOut);
     }
 
-    public static CustomerService getCustomerService() {
+    public CustomerService getCustomerService() {
         return customerService;
     }
 
-    public static ReservationService getReservationService() {
+    public ReservationService getReservationService() {
         return reservationService;
     }
 }

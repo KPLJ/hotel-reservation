@@ -3,20 +3,26 @@ package service;
 import model.Customer;
 import model.IRoom;
 import model.Reservation;
-import model.Room;
 
-import javax.naming.spi.ResolveResult;
 import java.util.*;
 
 public class ReservationService {
+    private static ReservationService reservationService = null;
     // Map<RoomNumber, IRoom>
     private static Map<String, IRoom> rooms;
     //Map<Reservation.toString(), Reservation>
     private static Map<String, Reservation> reservations;
 
-    public ReservationService() {
+    private ReservationService() {
         rooms = new HashMap<>();
         reservations = new HashMap<>();
+    }
+
+    public static ReservationService getInstance() {
+        if (reservationService == null) {
+            reservationService = new ReservationService();
+        }
+        return reservationService;
     }
 
     public void addRoom(IRoom room) {

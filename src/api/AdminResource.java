@@ -9,12 +9,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class AdminResource {
-    static private CustomerService customerService;
-    static private ReservationService reservationService;
+    private static CustomerService customerService;
+    private static ReservationService reservationService;
 
     public AdminResource() {
-        customerService = HotelResource.getCustomerService();
-        reservationService = HotelResource.getReservationService();
+        customerService = CustomerService.getInstance();
+        reservationService = ReservationService.getInstance();
     }
 
     public void addRoom(List<IRoom> rooms) {
@@ -34,4 +34,8 @@ public class AdminResource {
     public void displayAllReservations() {
         reservationService.printAllReservation();
     }
+
+    public static CustomerService getCustomerService() { return customerService; }
+
+    public static ReservationService getReservationService() { return reservationService; }
 }
