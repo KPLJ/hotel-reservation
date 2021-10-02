@@ -4,10 +4,13 @@ import api.HotelResource;
 import model.IRoom;
 import model.Reservation;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class MainMenu {
     private final HotelResource hotelResource;
@@ -64,6 +67,8 @@ public class MainMenu {
         System.out.println("Please input check-in date and check out date (e.g. yyyymmdd-yyyymmdd): ");
         Scanner in = new Scanner(System.in);
         String dataString = in.next();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date checkInDate, checkOutDate;
 
         while(true) {
             if (dataString.length() != "yyyymmdd-yyyymmdd".length()) {
@@ -74,23 +79,18 @@ public class MainMenu {
             }
         }
 
+        /* use SimpleDateFormat to check date format */
         while (true) {
-            if (isInteger(dataString.substring(0, 8)) && isInteger(dataString.substring(9, 17))) {
+            try {
+                //String to date conversion
+                checkInDate = sdf.parse(dataString.substring(0, 8));
+                checkOutDate = sdf.parse(dataString.substring(9, 17));
                 break;
-            } else {
+            } catch (ParseException e) {
                 System.out.println("Please input dates in correct format (yyyymmdd-yyyymmdd): ");
                 dataString = in.next();
             }
         }
-
-        int inYear = Integer.parseInt(dataString.substring(0, 4));
-        int inMonth = Integer.parseInt(dataString.substring(4, 6));
-        int inDate = Integer.parseInt(dataString.substring(6, 8));
-        int outYear = Integer.parseInt(dataString.substring(9, 13));
-        int outMonth = Integer.parseInt(dataString.substring(13, 15));
-        int outDate = Integer.parseInt(dataString.substring(15, 17));
-        Date checkInDate = new Date(inYear, inMonth, inDate);
-        Date checkOutDate = new Date(outYear, outMonth, outDate);
 
         Collection<IRoom> availableRooms = hotelResource.findARoom(checkInDate, checkOutDate);
         if (!availableRooms.isEmpty()) {
@@ -99,7 +99,29 @@ public class MainMenu {
             }
         } else {
             System.out.println("No available room found.");
-            return;
+
+            // search for alternative dates
+            // calculate new check in date by adding 7 days
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(checkInDate);
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
+            Date newCheckInDate = calendar.getTime();
+
+            // calculate new check out date
+            calendar.setTime(checkOutDate);
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
+            Date newCheckOutDate = calendar.getTime();
+
+            availableRooms = hotelResource.findARoom(newCheckInDate, newCheckOutDate);
+
+            if (!availableRooms.isEmpty()) {
+                for (IRoom room : availableRooms) {
+                    System.out.println(room);
+                }
+            } else {
+                System.out.println("No available rooms found on alternative check in date.");
+                return;
+            }
         }
 
         System.out.println("Please input the room number of the room you want to book: ");
