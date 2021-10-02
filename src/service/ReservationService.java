@@ -13,7 +13,7 @@ public class ReservationService {
     //Map<Reservation.toString(), Reservation>
     private static Map<String, Reservation> reservations;
 
-    private ReservationService() {
+    ReservationService() {
         rooms = new HashMap<>();
         reservations = new HashMap<>();
     }
